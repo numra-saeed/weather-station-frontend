@@ -35,6 +35,6 @@
     "axios": "^0.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-table-view": "^1.1.1"
+    "websocket": "^1.0.34"
   }
 }
