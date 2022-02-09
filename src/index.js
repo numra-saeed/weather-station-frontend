@@ -20,7 +20,7 @@ const App = () => {
             client.onmessage = (message) => {
                 console.log(message);
                 const update = JSON.parse(message.data);
-                if (searchQuery == update.city) {
+                if ((searchQuery == update.city) &&  update.type == 'weather_update' ) {
                     console.log("Weather update received");
                     //weatherUpdate = update
                     setWeatherUpdate({ ...update });
