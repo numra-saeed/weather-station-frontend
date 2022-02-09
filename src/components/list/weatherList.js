@@ -21,8 +21,6 @@ export default class WeatherList extends React.Component {
       return;
     }
 
-
-
     let config = {
       headers: {
         "x-api-key": localStorage.getItem("weather-key"),
