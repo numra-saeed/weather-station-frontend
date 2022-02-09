@@ -7,7 +7,7 @@ export default class WeatherList extends React.Component {
     this.getWeatherData = this.getWeatherData.bind(this);
   }
   state = {
-    weatherList: [],
+    weatherList: this.props.weatherUpdate,
     canSendRequest: true,
     interval: null
   }
@@ -44,7 +44,6 @@ export default class WeatherList extends React.Component {
       });
 
     const Interval = setInterval(() => {
-      console.log("can sendrequest ");
       this.setState({ canSendRequest: true });
     }, 3000);
     this.setState({ interval: Interval });
@@ -85,13 +84,14 @@ export default class WeatherList extends React.Component {
               // Only do this if items have no stable IDs
               <li key={index} style={{ textAlign: "left" }}>
                 <span>
-                  <h4>Location: {weather.name}</h4>
+                  <h4>Location: {weather.city}</h4>
 
                 </span>
-                <p><b>Coordinates:</b> {weather.coord.lat}, {weather.coord.lon}</p>
-                <span><b> Temperature:</b> {weather.main.temp}</span>,
-                <span><b> Humidity:</b> {weather.main.humidity}</span>,
-                <span><b> Pressure:</b> {weather.main.pressure}</span>
+                <p><b>Date:</b> {weather.timestamp}</p>
+                <p><b>Coordinates:</b> {weather.lat}, {weather.lon}</p>
+                <span><b> Temperature:</b> {weather.temperature}</span>,
+                <span><b> Humidity:</b> {weather.humidity}</span>,
+                <span><b> Pressure:</b> {weather.pressure}</span>
               </li>
             )
           }

@@ -5,9 +5,13 @@ import SearchBar from './components/list/search';
 import WeatherList from './components/list/weatherList';
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
-const client = new W3CWebSocket("ws://localhost:3001/");
-
+let client = null;
 const App = () => {
+
+    const [searchQuery, setSearchQuery] = useState("Islamabad");
+    const [keyGenerated, setKeyGenerated] = useState('');
+    const [weatherUpdate, setWeatherUpdate] = useState('');
+
     React.useEffect(
         () => {
             client.onopen = () => {
@@ -15,14 +19,34 @@ const App = () => {
             };
             client.onmessage = (message) => {
                 console.log(message);
+                const update = JSON.parse(message.data);
+                if (searchQuery == update.city) {
+                    console.log("Weather update received");
+                    //weatherUpdate = update
+                    setWeatherUpdate({ ...update });
+                }
             };
-        }, []
+
+            client.onclose = (msg) => {
+                console.log("Connection Close");
+                console.log(msg);
+            };
+
+            client.onerror = (msg) => {
+                console.log("Error in socket connection");
+                console.log(msg);
+            }
+        }, [client]
     );
 
-    const [searchQuery, setSearchQuery] = useState("Islamabad");
-    const [keyGenerated, setKeyGenerated] = useState('');
     let isKeyGenerated = (localStorage.getItem("weather-key") || keyGenerated) ? true : false;
 
+    if (isKeyGenerated) {
+        const key = localStorage.getItem("weather-key");
+        if (!client) {
+            client = new W3CWebSocket(`ws://localhost:3001/path?key=${key}`);
+        }
+    }
 
     return (
         <div>
@@ -34,7 +58,7 @@ const App = () => {
                 <SearchBar searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery} />
 
-                <WeatherList searchQuery={searchQuery} />
+                <WeatherList searchQuery={searchQuery} weatherUpdate={weatherUpdate} />
             </div>
             }
 
